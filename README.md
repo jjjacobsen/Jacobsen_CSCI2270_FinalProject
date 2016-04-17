@@ -1,1 +1,2 @@
-Lets see how well this goes without the hashtag
+# Jonah Jacobsen's Final Project
+For my project I am going to work alone. I intend to ...
