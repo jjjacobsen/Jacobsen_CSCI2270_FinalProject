@@ -27,10 +27,12 @@ class MusicLibrary
 		void searchBySong(std::string name);
 		void searchByArtist(std::string ar);
 		void searchByAlbum(std::string al);
+		/*
 		7
 		8
 		9
 		10
+		*/
 		// the 10 public methods necessary
 
 	private:

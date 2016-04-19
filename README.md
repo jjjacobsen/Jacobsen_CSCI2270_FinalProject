@@ -3,7 +3,7 @@ For my project I am going to work alone. I intend to make the code behind an iPo
 
 DISCLAIMER: I DID NOT MAKE ANY OF THE MUSIC IN THIS PROJECT
 
-How to Run: download the text file, the cpp files, and the mp3 files to a folder on your computer. Open terminal and cd to the directory you saved the files in. Compile by typing "g++ -std=c++11 _____________". Execute by typing "./a.out". From here you will...
+How to Run: download the text file, the cpp files, and the mp3 files to a folder on your computer. Open terminal and cd to the directory you saved the files in. Compile by typing "g++ -std=c++11 MusicLibrary.cpp main.cpp". Execute by typing "./a.out". Make sure that none of the inputs have a comma in them.
 
 System Requirements: Linux, probably OS X, and maybe Windows. For full functionality speakers would be advised.
 

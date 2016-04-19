@@ -22,7 +22,7 @@ void MusicLibrary::displaySongs(){
 		if(hashTable[x] != NULL){
 			tmp = hashTable[x];
 			while(tmp != NULL){
-				cout << tmp->title << " by: " << tmp->artist << " on: " << tmp->album << "; "
+				cout << tmp->title << ", by " << tmp->artist << ", on " << tmp->album << "; ";
 				tmp = tmp->next;
 			}
 			cout << endl;
@@ -68,7 +68,7 @@ void MusicLibrary::searchByArtist(string ar){
 void MusicLibrary::searchByAlbum(string al){
 	;
 }
-
+/*
 7
 
 8
@@ -76,7 +76,7 @@ void MusicLibrary::searchByAlbum(string al){
 9
 
 10
-
+*/
 int MusicLibrary::hashSum(std::string key, int s){
 	int sum = 0;
 	for(int x = 0; x < key.size(); x++){
