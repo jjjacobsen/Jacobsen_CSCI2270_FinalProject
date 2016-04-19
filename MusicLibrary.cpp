@@ -18,7 +18,7 @@ void MusicLibrary::displaySongs(){
 	;
 }
 
-void MusicLibrary::addSong(string name, string ar, string al, int le){
+void MusicLibrary::addSong(string name, string ar, string al, string le){
 	;
 }
 
@@ -26,6 +26,14 @@ void MusicLibrary::deleteSong(string name){
 	;
 }
 
-void MusicLibrary::search(string name){
+void MusicLibrary::searchBySong(string name){
+	;
+}
+
+void MusicLibrary::searchByArtist(string ar){
+	;
+}
+
+void MusicLibrary::searchByAlbum(string al){
 	;
 }

@@ -5,8 +5,8 @@
 struct Song{
 	std::string title;
 	std::string artist;
-	std::album;
-	int length;
+	std::string album;
+	std::string length;
 
 	// if I figure out how, add the mp3 file here
 
@@ -20,11 +20,11 @@ class MusicLibrary
 		MusicLibrary();
 		~MusicLibrary();
 		void displaySongs();
-		void addSong(std::string name, std::string ar, std::string al, int le);
+		void addSong(std::string name, std::string ar, std::string al, std::string le);
 		void deleteSong(std::string name);
-		void search(std::string name);
-		5
-		6
+		void searchBySong(std::string name);
+		void searchByArtist(std::string ar);
+		void searchByAlbum(std::string al);
 		7
 		8
 		9
