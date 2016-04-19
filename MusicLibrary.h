@@ -22,13 +22,13 @@ class MusicLibrary
 		MusicLibrary();
 		~MusicLibrary();
 		void displaySongs();
-		void addSong(std::string name, std::string ar, std::string al, std::string le);
+		void addSong(std::string name, std::string ar, std::string al, std::string le); // this only adds a song to the hashTable, it doesn't change the txt file so additions wont save between successive program runs
 		void deleteSong(std::string name);
-		void searchBySong(std::string name);
+		Song* searchBySong(std::string name);
 		void searchByArtist(std::string ar);
 		void searchByAlbum(std::string al);
+		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
 		/*
-		7
 		8
 		9
 		10

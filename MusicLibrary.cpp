@@ -94,8 +94,23 @@ void MusicLibrary::deleteSong(string name){
 	;
 }
 
-void MusicLibrary::searchBySong(string name){
-	;
+Song* MusicLibrary::searchBySong(string name){
+	int index = hashSum(name,tableSize);
+	Song *tmp = hashTable[index];
+	if(tmp == NULL){
+		return NULL;
+	}
+	else{
+		while(tmp->title != name && tmp != NULL){
+			tmp = tmp->next;
+		}
+		if(tmp == NULL){
+			return NULL;
+		}
+		else{
+			return tmp;
+		}
+	}
 }
 
 void MusicLibrary::searchByArtist(string ar){
@@ -105,8 +120,11 @@ void MusicLibrary::searchByArtist(string ar){
 void MusicLibrary::searchByAlbum(string al){
 	;
 }
+
+void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){
+	;
+}
 /*
-7
 
 8
 
