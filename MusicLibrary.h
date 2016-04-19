@@ -8,6 +8,8 @@ struct Song{
 	std::string album;
 	std::string length;
 
+	bool added = false;
+
 	// if I figure out how, add the mp3 file here
 
 	Song *next = NULL;
