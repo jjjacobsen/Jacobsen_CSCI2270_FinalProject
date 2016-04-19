@@ -9,6 +9,43 @@ MusicLibrary::MusicLibrary(){
 	for(int i = 0; i < tableSize; i++){
 		hashTable[i] = NULL;
 	}
+
+	ifstream file;
+	file.open("songs.txt");
+	if(file.good()){
+		string spacer;
+		while(getline(file,spacer)){
+			string one; string two; string three; string four; string filler = ""; int count = 0;
+			int x = spacer.length();
+			for(int i = 0; i < x; i++){
+				char a = spacer[i];
+				if(a != ','){
+					filler += a;
+				}
+				else{
+					if(count == 0){
+						one = filler;
+						filler = "";
+						count++;
+					}
+					else if(count == 1){
+						two = filler;
+						filler = "";
+						count++;
+					}
+					else if(count == 2){
+						three = filler;
+						filler = "";
+						count++;
+					}
+				}
+			}
+			four = filler;
+
+			addSong(one,two,three,four);
+		}
+	}
+	file.close();
 }
 
 MusicLibrary::~MusicLibrary(){
