@@ -8,7 +8,7 @@ struct Song{
 	std::album;
 	int length;
 
-	// if I figure out how add the mp3 file here
+	// if I figure out how, add the mp3 file here
 
 	Song *next = NULL;
 	Song *previous = NULL;
@@ -19,10 +19,10 @@ class MusicLibrary
 	public:
 		MusicLibrary();
 		~MusicLibrary();
-		1
-		2
-		3
-		4
+		void displaySongs();
+		void addSong(std::string name, std::string ar, std::string al, int le);
+		void deleteSong(std::string name);
+		void search(std::string name);
 		5
 		6
 		7
