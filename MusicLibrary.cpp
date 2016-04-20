@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -183,8 +184,44 @@ void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std
 	file.close();
 }
 
-vector<Song*> shufflePlay(){
-	;
+vector<Song*> MusicLibrary::shufflePlay(){
+	int x = numSongs(); Song *tmp = new Song;
+	vector<Song*> shuffle;
+	/*
+	while(shuffle.size() < x){
+		int num = rand() % 10 + 1;
+		cout << num << endl;
+		if(hashTable[num] != NULL){
+			tmp = hashTable[num];
+			while(tmp->next != NULL){
+				tmp = tmp->next;
+			}
+			while(tmp->added == true && tmp->previous != NULL){
+				tmp = tmp->previous;
+			}
+			if(tmp->added == true){
+				cout << "anotha one" << endl;
+			}
+			else{
+				shuffle.push_back(tmp);
+				tmp->added = true;
+			}
+		}
+	}
+	
+	for(int i = 0; i < tableSize; i++){
+		if(hashTable[i] != NULL){
+			Song *tmp = hashTable[i];
+			while(tmp->next != NULL){
+				tmp->added = false;
+				tmp = tmp->next;
+			}
+			tmp->added = false;
+		}
+	}
+	*/
+	
+	return shuffle;
 }
 /*
 
@@ -194,6 +231,21 @@ vector<Song*> shufflePlay(){
 
 10
 */
+int MusicLibrary::numSongs(){
+	int count = 0;
+	for(int i = 0; i < tableSize; i++){
+		if(hashTable[i] != NULL){
+			Song *tmp = hashTable[i];
+			while(tmp->next != NULL){
+				count++;
+				tmp = tmp->next;
+			}
+			count++;
+		}
+	}
+	return count;
+}
+
 int MusicLibrary::hashSum(std::string key, int s){
 	int sum = 0;
 	for(int x = 0; x < key.size(); x++){

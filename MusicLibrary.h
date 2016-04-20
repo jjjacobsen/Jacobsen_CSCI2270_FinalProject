@@ -28,7 +28,7 @@ class MusicLibrary
 		Song* searchBySong(std::string name);
 		std::vector<Song*> searchByArtist(std::string ar); // this will return a vector that contains all songs with the same artist
 		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
-		vector<Song*> sufflePlay();
+		std::vector<Song*> shufflePlay();
 		/*
 		8
 		9
@@ -37,6 +37,7 @@ class MusicLibrary
 		// the 10 public methods necessary
 
 	private:
+		int numSongs();
 		int hashSum(std::string key, int s);
 		int tableSize = 10;
 		Song* hashTable[10]; // this is just gonna be a big hash table to hold all the songs

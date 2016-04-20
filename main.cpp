@@ -16,7 +16,8 @@ int main(){
 		cout << "3. Delete Song" << endl;
 		cout << "4. Search for Song" << endl;
 		cout << "5. Search by Artist" << endl;
-		cout << "6. Quit" << endl;
+		cout << "6. Shuffle Play" << endl;
+		cout << "7. Quit" << endl;
 		string path;
 		cin >> path;
 		if(path == "1"){
@@ -40,7 +41,7 @@ int main(){
 			ml.addSong(name,ar,al,le);
 			ml.newSong(name,ar,al,le);
 		}
-		else if(path == "6"){
+		else if(path == "7"){
 			cout << "Cya" << endl;
 			on = false;
 		}
@@ -100,6 +101,13 @@ int main(){
 					}
 				}
 			}
+		}
+		else if(path == "6"){
+			vector<Song*> shuffle = ml.shufflePlay();
+			for(int i = 0; i < shuffle.size(); i++){
+				cout << shuffle[i]->title << " ";
+			}
+			cout << endl;
 		}
 	}
 
