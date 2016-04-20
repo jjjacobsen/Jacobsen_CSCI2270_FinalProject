@@ -28,8 +28,8 @@ class MusicLibrary
 		Song* searchBySong(std::string name);
 		std::vector<Song*> searchByArtist(std::string ar); // this will return a vector that contains all songs with the same artist
 		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
+		vector<Song*> sufflePlay();
 		/*
-		7
 		8
 		9
 		10

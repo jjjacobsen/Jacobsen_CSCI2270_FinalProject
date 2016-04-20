@@ -182,6 +182,10 @@ void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std
 	}
 	file.close();
 }
+
+vector<Song*> shufflePlay(){
+	;
+}
 /*
 
 8
