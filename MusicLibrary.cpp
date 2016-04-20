@@ -172,10 +172,6 @@ vector<Song*> MusicLibrary::searchByArtist(string ar){
 	return list;
 }
 
-void MusicLibrary::searchByAlbum(string al){
-	;
-}
-
 void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){
 	char comma = ',';
 	string entry = name + comma + ar + comma + al + comma + le;
