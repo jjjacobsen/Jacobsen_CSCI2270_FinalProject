@@ -73,10 +73,15 @@ int main(){
 			cout << "Enter Artist: ";
 			getline(cin,ar);
 			vector<Song*> list = ml.searchByArtist(ar);
-			for(int i = 0; i < list.size(); i++){
-				cout << list[i]->title << ", ";
+			if(list.size() == 0){
+				cout << "Artist Not Found" << endl;
 			}
-			cout << endl;
+			else{
+				for(int i = 0; i < list.size(); i++){
+					cout << list[i]->title << ", ";
+				}
+				cout << endl;
+			}
 		}
 	}
 
