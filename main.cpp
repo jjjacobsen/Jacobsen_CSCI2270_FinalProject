@@ -51,7 +51,7 @@ int main(){
 				cout << "Did not find song" << endl;
 			}
 			else{
-				cout << "We found your song" << endl;
+				cout << node->title << " by " << node->artist << " on " << node->album << endl;
 			}
 		}
 	}

@@ -102,14 +102,14 @@ Song* MusicLibrary::searchBySong(string name){
 	}
 	else{
 		while(tmp->title != name && tmp != NULL){
-			tmp = tmp->next;
+			if(tmp->next == NULL){
+				return NULL;
+			}
+			else{
+				tmp = tmp->next;
+			}
 		}
-		if(tmp == NULL){
-			return NULL;
-		}
-		else{
-			return tmp;
-		}
+		return tmp;
 	}
 }
 
