@@ -77,10 +77,28 @@ int main(){
 				cout << "Artist Not Found" << endl;
 			}
 			else{
-				for(int i = 0; i < list.size(); i++){
-					cout << list[i]->title << ", ";
+				bool on2 = true;
+				while(on2 == true){
+					cout << "===Found Artist===" << endl;
+					cout << "1. Display Songs" << endl;
+					cout << "2. Back To Main Menu" << endl;
+					string whereTo;
+					cin >> whereTo;
+					if(whereTo == "1"){
+						for(int i = 0; i < list.size(); i++){
+							if(i != list.size()-1){
+								cout << list[i]->title << ", ";
+							}
+							else{
+								cout << list[i]->title;
+							}
+						}
+						cout << endl;
+					}
+					else if(whereTo == "2"){
+						on2 = false;
+					}
 				}
-				cout << endl;
 			}
 		}
 	}
