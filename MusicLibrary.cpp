@@ -59,7 +59,12 @@ void MusicLibrary::displaySongs(){
 		if(hashTable[x] != NULL){
 			tmp = hashTable[x];
 			while(tmp != NULL){
-				cout << tmp->title << ", by " << tmp->artist << ", on " << tmp->album << "; ";
+				if(tmp->next != NULL){
+					cout << tmp->title << ", ";
+				}
+				else{
+					cout << tmp->title;
+				}
 				tmp = tmp->next;
 			}
 			cout << endl;
@@ -91,7 +96,46 @@ void MusicLibrary::addSong(string name, string ar, string al, string le){
 }
 
 void MusicLibrary::deleteSong(string name){
-	;
+	Song *node = searchBySong(name);
+	if(node == NULL){
+		cout << "Did not find song" << endl;
+	}
+	else{
+		char comma = ',';
+		string exit = node->title + comma + node->artist + comma + node->album + comma + node->length;
+		
+		string line;
+		ifstream file2("songs.txt");
+		ofstream file3("outfile.txt");
+		while(getline(file2,line)){
+			if(line != exit){
+				file3 << line << "\n";
+			}
+		}
+		file2.close();
+		file3.close();
+		remove("songs.txt");
+		rename("outfile.txt","songs.txt");
+	
+		int index = hashSum(name,tableSize);
+		if(node->previous == NULL && node->next == NULL){
+			hashTable[index] = NULL;
+		}
+		else if(node->previous == NULL && node->next != NULL){
+			node->next->previous = NULL;
+			hashTable[index] = node->next;
+			delete node;
+		}
+		else if(node->previous != NULL && node->next == NULL){
+			node->previous->next = NULL;
+			delete node;
+		}
+		else if(node->previous != NULL && node->next != NULL){
+			node->next->previous = node->previous;
+			node->previous->next = node->next;
+			delete node;
+		}
+	}
 }
 
 Song* MusicLibrary::searchBySong(string name){
@@ -122,7 +166,14 @@ void MusicLibrary::searchByAlbum(string al){
 }
 
 void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){
-	;
+	char comma = ',';
+	string entry = name + comma + ar + comma + al + comma + le;
+	ofstream file;
+	file.open("songs.txt", ios_base::app);
+	if(file.good()){
+		file << entry << "\n";
+	}
+	file.close();
 }
 /*
 
