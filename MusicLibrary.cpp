@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -157,8 +158,18 @@ Song* MusicLibrary::searchBySong(string name){
 	}
 }
 
-void MusicLibrary::searchByArtist(string ar){
-	;
+vector<Song*> MusicLibrary::searchByArtist(string ar){
+	vector<Song*> list;
+	for(int x = 0; x < tableSize; x++){
+		Song *tmp = hashTable[x];
+		while(tmp != NULL){
+			if(tmp->artist == ar){
+				list.push_back(tmp);
+			}
+			tmp = tmp->next;
+		}
+	}
+	return list;
 }
 
 void MusicLibrary::searchByAlbum(string al){

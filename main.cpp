@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "MusicLibrary.h"
+#include <vector>
 using namespace std;
 
 int main(){
@@ -12,9 +13,10 @@ int main(){
 		cout << "======Main Menu======" << endl;
 		cout << "1. Display Songs" << endl;
 		cout << "2. Add Song" << endl;
-		cout << "3. Search for Song" << endl;
-		cout << "4. Delete Song" << endl;
-		cout << "5. Quit" << endl;
+		cout << "3. Delete Song" << endl;
+		cout << "4. Search for Song" << endl;
+		cout << "5. Search by Artist" << endl;
+		cout << "6. Quit" << endl;
 		string path;
 		cin >> path;
 		if(path == "1"){
@@ -38,11 +40,11 @@ int main(){
 			ml.addSong(name,ar,al,le);
 			ml.newSong(name,ar,al,le);
 		}
-		else if(path == "5"){
+		else if(path == "6"){
 			cout << "Cya" << endl;
 			on = false;
 		}
-		else if(path == "3"){
+		else if(path == "4"){
 			string wtf;
 			getline(cin,wtf);
 			string name;
@@ -56,13 +58,25 @@ int main(){
 				cout << node->title << " by " << node->artist << " on " << node->album << endl;
 			}
 		}
-		else if(path == "4"){
+		else if(path == "3"){
 			string wtf;
 			getline(cin,wtf);
 			string title;
 			cout << "Enter Song: ";
 			getline(cin,title);
 			ml.deleteSong(title);
+		}
+		else if(path == "5"){
+			string wtf;
+			getline(cin,wtf);
+			string ar;
+			cout << "Enter Artist: ";
+			getline(cin,ar);
+			vector<Song*> list = ml.searchByArtist(ar);
+			for(int i = 0; i < list.size(); i++){
+				cout << list[i]->title << ", ";
+			}
+			cout << endl;
 		}
 	}
 
