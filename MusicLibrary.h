@@ -9,10 +9,12 @@ struct Song{
 	std::string album;
 	std::string length;
 
-	bool added = false;
-
 	Song *next = NULL;
 	Song *previous = NULL;
+};
+
+struct Playlist{
+	std::vector<Song> playlist;
 };
 
 class MusicLibrary
@@ -26,15 +28,10 @@ class MusicLibrary
 		Song* searchBySong(std::string name);
 		std::vector<Song*> searchByArtist(std::string ar); // this will return a vector that contains all songs with the same artist
 		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
-		std::vector<Song*> shufflePlay();
 		void timer(std::string length);
-		/*
-		9
-		10
-		*/
-		// the 10 public methods necessary
 
 	private:
+		std::vector<Playlist> allPlaylists;
 		double timeConverter(std::string time);
 		int numSongs();
 		int hashSum(std::string key, int s);

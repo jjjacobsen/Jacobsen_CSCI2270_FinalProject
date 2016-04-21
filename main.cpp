@@ -16,8 +16,9 @@ int main(){
 		cout << "3. Delete Song" << endl;
 		cout << "4. Search for Song" << endl;
 		cout << "5. Search by Artist" << endl;
-		cout << "6. Shuffle Play" << endl;
-		cout << "7. Quit" << endl;
+		cout << "6. Go To Playlists" << endl;
+		cout << "7. Go To Queue" << endl;
+		cout << "8. Quit" << endl;
 		string path;
 		cin >> path;
 		if(path == "1"){
@@ -41,7 +42,7 @@ int main(){
 			ml.addSong(name,ar,al,le);
 			ml.newSong(name,ar,al,le);
 		}
-		else if(path == "7"){
+		else if(path == "8"){
 			cout << "Cya" << endl;
 			on = false;
 		}
@@ -117,11 +118,61 @@ int main(){
 			}
 		}
 		else if(path == "6"){
-			vector<Song*> shuffle = ml.shufflePlay();
-			for(int i = 0; i < shuffle.size(); i++){
-				cout << shuffle[i]->title << " ";
+			bool on4 = true;
+			while(on4){
+				cout << "======PLAYLISTS======" << endl;
+				cout << "1. Display Playlists" << endl;
+				cout << "2. Open Specific Playlist" << endl;
+				cout << "3. Create Playlist" << endl;
+				cout << "4. Delete Playlist" << endl;
+				cout << "5. Back to Main Menu" << endl;
+				string anotha;
+				cin >> anotha;
+				if(anotha == "1"){
+					// open playlists
+				}
+				else if(anotha == "2"){
+					// search playlists
+					// in here have the option to edit whatever playlist you search for, to add or remove individual songs
+				}
+				else if(anotha == "5"){
+					on4 = false;
+				}
+				else if(anotha == "3"){
+					// new playlist
+				}
+				else if(anotha == "4"){
+					// delete playlist
+				}
 			}
-			cout << endl;
+		}
+		else if(path == "7"){
+			bool on5 = true;
+			while(on5){
+				cout << "=====Queue=====" << endl;
+				cout << "1. Display Order" << endl;
+				cout << "2. Add Song to Up Next" << endl;
+				cout << "3. Play from all songs" << endl;
+				cout << "4. Play playlist" << endl;
+				cout << "5. Back to Main Menu" << endl;
+				string last;
+				cin >> last;
+				if(last == "1"){
+					// display the queue
+				}
+				else if(last == "2"){
+					// add a song to queue
+				}
+				else if(last == "3"){
+					// remake queue for all songs
+				}
+				else if(last == "4"){
+					// play from a playlist
+				}
+				else if(last == "5"){
+					on5 = false;
+				}
+			}
 		}
 	}
 

@@ -14,7 +14,7 @@ MusicLibrary::MusicLibrary(){
 		hashTable[i] = NULL;
 	}
 
-	ifstream file;
+	ifstream file; // this file read is a cheeky way I am able to parse the file by commas. I know I could use sstream but...
 	file.open("songs.txt");
 	if(file.good()){
 		string spacer;
@@ -56,30 +56,21 @@ MusicLibrary::~MusicLibrary(){
 	; // destructor
 }
 
-void MusicLibrary::displaySongs(){
+void MusicLibrary::displaySongs(){ // simply goes through each index in hash table and prints out songs
 	Song *tmp = new Song;
+	cout << "=====SONGS=====" << endl;
 	for(int x = 0; x < tableSize; x++){
-		cout << "songs at hashTable index " << x << ": ";
 		if(hashTable[x] != NULL){
 			tmp = hashTable[x];
 			while(tmp != NULL){
-				if(tmp->next != NULL){
-					cout << tmp->title << ", ";
-				}
-				else{
-					cout << tmp->title;
-				}
+				cout << tmp->title << " by " << tmp->artist << endl;
 				tmp = tmp->next;
 			}
-			cout << endl;
-		}
-		else{
-			cout << "no songs at current index" << endl;
 		}
 	}
 }
 
-void MusicLibrary::addSong(string name, string ar, string al, string le){
+void MusicLibrary::addSong(string name, string ar, string al, string le){ // this will add a song to the hash table
 	int index = hashSum(name,tableSize);
 	Song *node = new Song;
 	node->title = name;
@@ -99,7 +90,7 @@ void MusicLibrary::addSong(string name, string ar, string al, string le){
 	}
 }
 
-void MusicLibrary::deleteSong(string name){
+void MusicLibrary::deleteSong(string name){ // making this function was tricky because deleting from the middle of a file is hard. This also handles the hash table as well as the .txt file
 	Song *node = searchBySong(name);
 	if(node == NULL){
 		cout << "Did not find song" << endl;
@@ -119,7 +110,7 @@ void MusicLibrary::deleteSong(string name){
 		file2.close();
 		file3.close();
 		remove("songs.txt");
-		rename("outfile.txt","songs.txt");
+		rename("outfile.txt","songs.txt"); // this method of copying the whole file except for one line and then renaming the new file wouldn't work for huge data sets, but for this small project it will do
 	
 		int index = hashSum(name,tableSize);
 		if(node->previous == NULL && node->next == NULL){
@@ -142,7 +133,7 @@ void MusicLibrary::deleteSong(string name){
 	}
 }
 
-Song* MusicLibrary::searchBySong(string name){
+Song* MusicLibrary::searchBySong(string name){ // returns a Song pointer for whatever title you search for
 	int index = hashSum(name,tableSize);
 	Song *tmp = hashTable[index];
 	if(tmp == NULL){
@@ -161,7 +152,7 @@ Song* MusicLibrary::searchBySong(string name){
 	}
 }
 
-vector<Song*> MusicLibrary::searchByArtist(string ar){
+vector<Song*> MusicLibrary::searchByArtist(string ar){ // makes a vector of song pointers for every song that shares the same artist
 	vector<Song*> list;
 	for(int x = 0; x < tableSize; x++){
 		Song *tmp = hashTable[x];
@@ -175,7 +166,7 @@ vector<Song*> MusicLibrary::searchByArtist(string ar){
 	return list;
 }
 
-void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){
+void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){ // this just changes the .txt file, I separated the two add functions so I can use the first one when building the musiclibrary class and the other to save modifications between program runs
 	char comma = ',';
 	string entry = name + comma + ar + comma + al + comma + le;
 	ofstream file;
@@ -186,47 +177,7 @@ void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std
 	file.close();
 }
 
-vector<Song*> MusicLibrary::shufflePlay(){
-	int x = numSongs(); Song *tmp = new Song;
-	vector<Song*> shuffle;
-	/*
-	while(shuffle.size() < x){
-		int num = rand() % 10 + 1;
-		cout << num << endl;
-		if(hashTable[num] != NULL){
-			tmp = hashTable[num];
-			while(tmp->next != NULL){
-				tmp = tmp->next;
-			}
-			while(tmp->added == true && tmp->previous != NULL){
-				tmp = tmp->previous;
-			}
-			if(tmp->added == true){
-				cout << "anotha one" << endl;
-			}
-			else{
-				shuffle.push_back(tmp);
-				tmp->added = true;
-			}
-		}
-	}
-	
-	for(int i = 0; i < tableSize; i++){
-		if(hashTable[i] != NULL){
-			Song *tmp = hashTable[i];
-			while(tmp->next != NULL){
-				tmp->added = false;
-				tmp = tmp->next;
-			}
-			tmp->added = false;
-		}
-	}
-	*/
-	
-	return shuffle;
-}
-
-void MusicLibrary::timer(std::string length){
+void MusicLibrary::timer(std::string length){ // side project, functions in here are derived from the libraries at the top
 	string totalTime = length;
 	double rawTime = timeConverter(totalTime);
 	
@@ -262,7 +213,7 @@ void MusicLibrary::timer(std::string length){
 	}
 }
 
-double MusicLibrary::timeConverter(string time){
+double MusicLibrary::timeConverter(string time){ // this function is what allows me to take a string of 4:42 and then convert that into the number of seconds, I do this because my timer function needs seconds
 	double returnVal = 0;
 	string minutes = "";
 	string seconds = "";
@@ -287,7 +238,7 @@ double MusicLibrary::timeConverter(string time){
 	return returnVal;
 }
 
-int MusicLibrary::numSongs(){
+int MusicLibrary::numSongs(){ // haven't used this function yet, thought I was going to but never did, keeping it in case it becomes useful
 	int count = 0;
 	for(int i = 0; i < tableSize; i++){
 		if(hashTable[i] != NULL){
@@ -302,7 +253,7 @@ int MusicLibrary::numSongs(){
 	return count;
 }
 
-int MusicLibrary::hashSum(std::string key, int s){
+int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store everything, as you should know
 	int sum = 0;
 	for(int x = 0; x < key.size(); x++){
 		sum = sum + key[x];
