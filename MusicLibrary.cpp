@@ -4,6 +4,8 @@
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
@@ -223,14 +225,68 @@ vector<Song*> MusicLibrary::shufflePlay(){
 	
 	return shuffle;
 }
-/*
 
-8
+void MusicLibrary::timer(std::string length){
+	string totalTime = length;
+	double rawTime = timeConverter(totalTime);
+	
+	
+	clock_t startTime = clock();
+	double secondsPassed;
+	cout << "Playing Song" << endl;
+	bool flag = true;
+	int currentTime = 0;
+	int minutes = -1;
+	int seconds = 0;
+	while(flag){
+		seconds = currentTime % 60;
+		secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+		if(currentTime == secondsPassed){
+			if(currentTime % 60 == 0){
+				minutes++;
+			}
+			cout << ' ' << minutes << ':';
+			if(seconds < 10){
+				cout << '0' << seconds;
+			}
+			else{
+				cout << seconds;
+			}
+			cout << "/" << length << '\r' << flush;
+			currentTime++;
+		}
+		if(secondsPassed >= rawTime){
+			cout << endl << "done" << endl;
+			flag = false;
+		}
+	}
+}
 
-9
+double MusicLibrary::timeConverter(string time){
+	double returnVal = 0;
+	string minutes = "";
+	string seconds = "";
+	bool before = true;
+	for(int i = 0; i < time.size(); i++){
+		if(time[i] == ':'){
+			before = false;
+		}
+		else{
+			if(before == true){
+				minutes = minutes += time[i];
+			}
+			else if(before == false){
+				seconds = seconds += time[i];
+			}
+		}
+	}
+	double min = stod(minutes);
+	double sec = stod(seconds);
+	min = min*60;
+	returnVal = min + sec;
+	return returnVal;
+}
 
-10
-*/
 int MusicLibrary::numSongs(){
 	int count = 0;
 	for(int i = 0; i < tableSize; i++){

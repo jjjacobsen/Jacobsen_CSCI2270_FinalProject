@@ -57,6 +57,20 @@ int main(){
 			}
 			else{
 				cout << node->title << " by " << node->artist << " on " << node->album << endl;
+				bool on3 = true;
+				while(on3 == true){
+					cout << "1. Play Song" << endl;
+					cout << "2. Back to Main Menu" << endl;
+					string whatNext;
+					cin >> whatNext;
+					if(whatNext == "1"){
+						ml.timer(node->length);
+						on3 = false;
+					}
+					else if(whatNext == "2"){
+						on3 = false;
+					}
+				}
 			}
 		}
 		else if(path == "3"){

@@ -11,8 +11,6 @@ struct Song{
 
 	bool added = false;
 
-	// if I figure out how, add the mp3 file here
-
 	Song *next = NULL;
 	Song *previous = NULL;
 };
@@ -29,14 +27,15 @@ class MusicLibrary
 		std::vector<Song*> searchByArtist(std::string ar); // this will return a vector that contains all songs with the same artist
 		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
 		std::vector<Song*> shufflePlay();
+		void timer(std::string length);
 		/*
-		8
 		9
 		10
 		*/
 		// the 10 public methods necessary
 
 	private:
+		double timeConverter(std::string time);
 		int numSongs();
 		int hashSum(std::string key, int s);
 		int tableSize = 10;
