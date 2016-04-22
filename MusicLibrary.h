@@ -15,6 +15,7 @@ struct Song{
 
 struct Playlist{
 	std::vector<Song> playlist;
+	std::string fileName;
 };
 
 class MusicLibrary
@@ -31,6 +32,8 @@ class MusicLibrary
 		void timer(std::string length);
 
 	private:
+		void addPlaylist(std::string fileName); // this one will not affect the .txt files
+		int totalPlaylists = 0; // is just initialized to 0, in the constructor function this value will change
 		std::vector<Playlist> allPlaylists;
 		double timeConverter(std::string time);
 		int numSongs();

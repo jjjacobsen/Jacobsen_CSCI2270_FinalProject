@@ -10,7 +10,7 @@
 using namespace std;
 
 MusicLibrary::MusicLibrary(){
-	for(int i = 0; i < tableSize; i++){
+	for(int i = 0; i < tableSize; i++){ // just so I can assign all the values in hash table to NULL, not sure if I MUST do this but whatever
 		hashTable[i] = NULL;
 	}
 
@@ -50,6 +50,22 @@ MusicLibrary::MusicLibrary(){
 		}
 	}
 	file.close();
+	
+	ifstream file4; // this will check for all .txt files that make up playlists, then it will make the appropriate playlists
+	bool theEnd = true; string partA = "playlist"; string partC = ".txt"; int count = 1; string partB; string fileName;
+	while(theEnd){
+		partB = to_string(count);
+		fileName = partA + partB + partC;
+		file4.open(fileName);
+		if(file4.good()){
+			// make playlist in program
+			count++; totalPlaylists++;
+		}
+		else{
+			theEnd = false;
+		}
+		file4.close();
+	}
 }
 
 MusicLibrary::~MusicLibrary(){
@@ -211,6 +227,10 @@ void MusicLibrary::timer(std::string length){ // side project, functions in here
 			flag = false;
 		}
 	}
+}
+
+void MusicLibrary::addPlaylist(std::string fileName){
+	; // THIS IS WHERE I LEFT OFF
 }
 
 double MusicLibrary::timeConverter(string time){ // this function is what allows me to take a string of 4:42 and then convert that into the number of seconds, I do this because my timer function needs seconds
