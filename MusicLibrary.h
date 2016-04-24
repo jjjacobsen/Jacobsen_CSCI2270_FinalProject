@@ -16,6 +16,7 @@ struct Song{
 struct Playlist{
 	std::vector<Song> playlist;
 	std::string fileName;
+	std::string playlistName;
 };
 
 class MusicLibrary
@@ -30,6 +31,11 @@ class MusicLibrary
 		std::vector<Song*> searchByArtist(std::string ar); // this will return a vector that contains all songs with the same artist
 		void newSong(std::string name, std::string ar, std::string al, std::string le); // this changes the txt file
 		void timer(std::string length);
+		void displayPlaylists(); // shows all playlists
+		int displayPlaylist(std::string playlistname); // lets user enter specific playlist to inspect
+		void addSongPlaylist(std::string name, Playlist *pl);
+		Playlist* getSelectedPlaylist(std::string name);
+		void removeSongPlaylist(std::string name, Playlist *pl);
 
 	private:
 		void addPlaylist(std::string fileName); // this one will not affect the .txt files

@@ -58,7 +58,7 @@ MusicLibrary::MusicLibrary(){
 		fileName = partA + partB + partC;
 		file4.open(fileName);
 		if(file4.good()){
-			// make playlist in program
+			addPlaylist(fileName);
 			count++; totalPlaylists++;
 		}
 		else{
@@ -229,8 +229,127 @@ void MusicLibrary::timer(std::string length){ // side project, functions in here
 	}
 }
 
-void MusicLibrary::addPlaylist(std::string fileName){
-	; // THIS IS WHERE I LEFT OFF
+void MusicLibrary::displayPlaylists(){
+	if(allPlaylists.size() != 0){
+		cout << "Current Playlists:" << endl;
+		for(int i = 0; i < totalPlaylists; i++){
+			cout << i+1 << ". " << allPlaylists[i].playlistName << endl;
+		}
+	}
+	else{
+		cout << "no playlists" << endl;
+	}
+}
+
+int MusicLibrary::displayPlaylist(string playlistname){ // the reason this function returns an int is so that in the main.cpp file we can avoid going into the while loop for the next step if we don't find a playlist
+	bool found = false;
+	for(int i = 0; i < totalPlaylists; i++){
+		if(allPlaylists[i].playlistName == playlistname){
+			found = true;
+			cout << "===" << playlistname << "===" << endl;
+			for(int j = 0; j < allPlaylists[i].playlist.size(); j++){
+				cout << allPlaylists[i].playlist[j].title << endl;
+			}
+		}
+	}
+	if(found == false){
+		cout << "Did not find playlist" << endl;
+		return 0;
+	}
+	return 1; // dont need else statement because if the code goes into the if statement above, once it hits the return statement the function ends
+}
+
+void MusicLibrary::addSongPlaylist(string name, Playlist *pl){
+	Song *tmp = searchBySong(name);
+	if(tmp == NULL){
+		cout << "Did not find song in library" << endl;
+	}
+	else{
+		Song newSong; // adds the song to the vector of songs in the playlist
+		newSong.title = tmp->title;
+		newSong.artist = tmp->artist;
+		newSong.album = tmp->album;
+		newSong.length = tmp->length;
+		pl->playlist.push_back(newSong);
+		
+		ofstream file; // edits the .txt file so the change is saved
+		file.open(pl->fileName, ios_base::app);
+		if(file.good()){
+			file << tmp->title << "\n";
+		}
+		file.close();
+		
+		displayPlaylist(pl->playlistName); // shows updated change
+	}
+}
+
+Playlist* MusicLibrary::getSelectedPlaylist(string name){
+	for(int i = 0; i < totalPlaylists; i++){
+		if(allPlaylists[i].playlistName == name){
+			return &allPlaylists[i];
+		}
+	}
+}
+
+void MusicLibrary::removeSongPlaylist(std::string name, Playlist *pl){
+	bool found = false;
+	for(int i = 0; i < pl->playlist.size(); i++){
+		if(name == pl->playlist[i].title){
+			found = true;
+		}
+	}
+	if(found == false){
+		cout << "Did not find song in playlist" << endl;
+	}
+	else{
+		for(int j = 0; j < pl->playlist.size(); j++){ // gets song out of program
+			if(name == pl->playlist[j].title){
+				pl->playlist.erase(pl->playlist.begin()+j);
+			}
+		}
+		
+		string line; // gets song out of .txt file
+		string filename = pl->fileName;
+		const char * filename2 = filename.c_str(); // need a const char * value for remove and rename functions below
+		ifstream file2(filename2);
+		ofstream file3("outfile.txt");
+		while(getline(file2,line)){
+			if(line != name){
+				file3 << line << "\n";
+			}
+		}
+		file2.close();
+		file3.close();
+		remove(filename2);
+		rename("outfile.txt",filename2);
+		
+		displayPlaylist(pl->playlistName); // shows updated change
+	}
+}
+
+void MusicLibrary::addPlaylist(string fileName){ // just used to build the playlists inside program
+	Playlist newPlaylist;
+	newPlaylist.fileName = fileName;
+	ifstream file5;
+	file5.open(fileName);
+	if(file5.good()){
+		string name;
+		getline(file5,name);
+		newPlaylist.playlistName = name;
+		string str;
+		while(getline(file5,str)){
+			Song *tmp = searchBySong(str);
+			Song song;
+			if(tmp != NULL){
+				song.title = tmp->title;
+				song.artist = tmp->artist;
+				song.album = tmp->album;
+				song.length = tmp->length;
+				newPlaylist.playlist.push_back(song);
+			}
+		}
+	}
+	allPlaylists.push_back(newPlaylist);
 }
 
 double MusicLibrary::timeConverter(string time){ // this function is what allows me to take a string of 4:42 and then convert that into the number of seconds, I do this because my timer function needs seconds

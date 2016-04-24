@@ -129,17 +129,53 @@ int main(){
 				string anotha;
 				cin >> anotha;
 				if(anotha == "1"){
-					// open playlists
+					ml.displayPlaylists();
 				}
 				else if(anotha == "2"){
-					// search playlists
-					// in here have the option to edit whatever playlist you search for, to add or remove individual songs
+					string wtf;
+					getline(cin,wtf);
+					string input;
+					cout << "What playlist would you like to open: ";
+					getline(cin,input);
+					int test = ml.displayPlaylist(input);
+					if(test == 1){
+						bool on6 = true;
+						Playlist *selected = ml.getSelectedPlaylist(input);
+						while(on6){
+							cout << "================" << endl;
+							cout << "1. Add Song" << endl;
+							cout << "2. Delete Song" << endl;
+							cout << "3. Back to playlist menu" << endl;
+							string nextinput;
+							cin >> nextinput;
+							if(nextinput == "1"){
+								string wtf;
+								getline(cin,wtf);
+								string nextinput;
+								cout << "What song would you like to add: ";
+								getline(cin,nextinput);
+								ml.addSongPlaylist(nextinput,selected);
+							}
+							else if(nextinput == "2"){
+								string wtf;
+								getline(cin,wtf);
+								string nextinput;
+								cout << "What song would you like to remove: ";
+								getline(cin,nextinput);
+								ml.removeSongPlaylist(nextinput,selected);
+							}
+							else if(nextinput == "3"){
+								on6 = false;
+							}
+						}
+					}
 				}
 				else if(anotha == "5"){
 					on4 = false;
 				}
 				else if(anotha == "3"){
 					// new playlist
+					// MAKE SURE TO UPDATE THE TOTALPLAYLISTS PRIVATE MEMBER
 				}
 				else if(anotha == "4"){
 					// delete playlist
