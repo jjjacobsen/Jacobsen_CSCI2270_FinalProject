@@ -9,4 +9,4 @@ Group Members: none
 
 Contributors:
 
-Open issues/bugs: Don't know how to exit the play song function without exiting the program. With the way I parse the songs.txt, the song info cannot contain any commas or else everything falls apart.
+Open issues/bugs: I would love if someone could figure out how to pause the timer function I have. Right now I cannot exit the timer without completely killing the program (i.e. ctrl + c). I have another repository on my github with just the timer function isolated if you want to try to figure it out. Another problem is with the way I parse the songs.txt file, the song info cannot contain any commas or else everything falls apart.

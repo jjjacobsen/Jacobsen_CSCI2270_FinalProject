@@ -10,6 +10,7 @@
 using namespace std;
 
 MusicLibrary::MusicLibrary(){
+	// First part of constructor is to make the hash table
 	for(int i = 0; i < tableSize; i++){ // just so I can assign all the values in hash table to NULL, not sure if I MUST do this but whatever
 		hashTable[i] = NULL;
 	}
@@ -51,6 +52,7 @@ MusicLibrary::MusicLibrary(){
 	}
 	file.close();
 	
+	// Second part is to make the playlists
 	ifstream file4; // this will check for all .txt files that make up playlists, then it will make the appropriate playlists
 	bool theEnd = true; string partA = "playlist"; string partC = ".txt"; int count = 1; string partB; string fileName;
 	while(theEnd){
@@ -59,18 +61,37 @@ MusicLibrary::MusicLibrary(){
 		file4.open(fileName);
 		if(file4.good()){
 			addPlaylist(fileName);
-			count++; totalPlaylists++;
+			count++; totalPlaylists++; // gotta make sure to update that private member
 		}
 		else{
 			theEnd = false;
 		}
 		file4.close();
 	}
+	
+	// Third part is to make queue ready
+	queueSize = 200;
+	arrayQueue = new Song[queueSize];
+	head = 0;
+	tail = 0;
+	queueCount = 0;
 }
+
 
 MusicLibrary::~MusicLibrary(){
 	; // destructor
 }
+
+
+int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store everything, as you should know
+	int sum = 0;
+	for(int x = 0; x < key.size(); x++){
+		sum = sum + key[x];
+	}
+	sum = sum % s;
+	return sum;
+}
+
 
 void MusicLibrary::displaySongs(){ // simply goes through each index in hash table and prints out songs
 	Song *tmp = new Song;
@@ -85,6 +106,7 @@ void MusicLibrary::displaySongs(){ // simply goes through each index in hash tab
 		}
 	}
 }
+
 
 void MusicLibrary::addSong(string name, string ar, string al, string le){ // this will add a song to the hash table
 	int index = hashSum(name,tableSize);
@@ -105,6 +127,7 @@ void MusicLibrary::addSong(string name, string ar, string al, string le){ // thi
 		tmp->next = node;
 	}
 }
+
 
 void MusicLibrary::deleteSong(string name){ // making this function was tricky because deleting from the middle of a file is hard. This also handles the hash table as well as the .txt file
 	Song *node = searchBySong(name);
@@ -149,6 +172,7 @@ void MusicLibrary::deleteSong(string name){ // making this function was tricky b
 	}
 }
 
+
 Song* MusicLibrary::searchBySong(string name){ // returns a Song pointer for whatever title you search for
 	int index = hashSum(name,tableSize);
 	Song *tmp = hashTable[index];
@@ -168,6 +192,7 @@ Song* MusicLibrary::searchBySong(string name){ // returns a Song pointer for wha
 	}
 }
 
+
 vector<Song*> MusicLibrary::searchByArtist(string ar){ // makes a vector of song pointers for every song that shares the same artist
 	vector<Song*> list;
 	for(int x = 0; x < tableSize; x++){
@@ -182,6 +207,7 @@ vector<Song*> MusicLibrary::searchByArtist(string ar){ // makes a vector of song
 	return list;
 }
 
+
 void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std::string le){ // this just changes the .txt file, I separated the two add functions so I can use the first one when building the musiclibrary class and the other to save modifications between program runs
 	char comma = ',';
 	string entry = name + comma + ar + comma + al + comma + le;
@@ -192,6 +218,33 @@ void MusicLibrary::newSong(std::string name, std::string ar, std::string al, std
 	}
 	file.close();
 }
+
+
+double MusicLibrary::timeConverter(string time){ // this function is what allows me to take a string of 4:42 and then convert that into the number of seconds, I do this because my timer function needs seconds
+	double returnVal = 0;
+	string minutes = "";
+	string seconds = "";
+	bool before = true;
+	for(int i = 0; i < time.size(); i++){
+		if(time[i] == ':'){
+			before = false;
+		}
+		else{
+			if(before == true){
+				minutes = minutes += time[i];
+			}
+			else if(before == false){
+				seconds = seconds += time[i];
+			}
+		}
+	}
+	double min = stod(minutes);
+	double sec = stod(seconds);
+	min = min*60;
+	returnVal = min + sec;
+	return returnVal;
+}
+
 
 void MusicLibrary::timer(std::string length){ // side project, functions in here are derived from the libraries at the top
 	string totalTime = length;
@@ -229,6 +282,33 @@ void MusicLibrary::timer(std::string length){ // side project, functions in here
 	}
 }
 
+
+void MusicLibrary::addPlaylist(string fileName){ // just used to build the playlists inside program
+	Playlist newPlaylist;
+	newPlaylist.fileName = fileName;
+	ifstream file5;
+	file5.open(fileName);
+	if(file5.good()){
+		string name;
+		getline(file5,name);
+		newPlaylist.playlistName = name;
+		string str;
+		while(getline(file5,str)){
+			Song *tmp = searchBySong(str);
+			Song song;
+			if(tmp != NULL){
+				song.title = tmp->title;
+				song.artist = tmp->artist;
+				song.album = tmp->album;
+				song.length = tmp->length;
+				newPlaylist.playlist.push_back(song);
+			}
+		}
+	}
+	allPlaylists.push_back(newPlaylist);
+}
+
+
 void MusicLibrary::displayPlaylists(){
 	if(allPlaylists.size() != 0){
 		cout << "Current Playlists:" << endl;
@@ -240,6 +320,7 @@ void MusicLibrary::displayPlaylists(){
 		cout << "no playlists" << endl;
 	}
 }
+
 
 int MusicLibrary::displayPlaylist(string playlistname){ // the reason this function returns an int is so that in the main.cpp file we can avoid going into the while loop for the next step if we don't find a playlist
 	bool found = false;
@@ -258,6 +339,7 @@ int MusicLibrary::displayPlaylist(string playlistname){ // the reason this funct
 	}
 	return 1; // dont need else statement because if the code goes into the if statement above, once it hits the return statement the function ends
 }
+
 
 void MusicLibrary::addSongPlaylist(string name, Playlist *pl){
 	Song *tmp = searchBySong(name);
@@ -283,13 +365,16 @@ void MusicLibrary::addSongPlaylist(string name, Playlist *pl){
 	}
 }
 
+
 Playlist* MusicLibrary::getSelectedPlaylist(string name){
 	for(int i = 0; i < totalPlaylists; i++){
 		if(allPlaylists[i].playlistName == name){
 			return &allPlaylists[i];
 		}
 	}
+	return NULL;
 }
+
 
 void MusicLibrary::removeSongPlaylist(std::string name, Playlist *pl){
 	bool found = false;
@@ -327,76 +412,130 @@ void MusicLibrary::removeSongPlaylist(std::string name, Playlist *pl){
 	}
 }
 
-void MusicLibrary::addPlaylist(string fileName){ // just used to build the playlists inside program
-	Playlist newPlaylist;
-	newPlaylist.fileName = fileName;
-	ifstream file5;
-	file5.open(fileName);
-	if(file5.good()){
-		string name;
-		getline(file5,name);
-		newPlaylist.playlistName = name;
-		string str;
-		while(getline(file5,str)){
-			Song *tmp = searchBySong(str);
-			Song song;
-			if(tmp != NULL){
-				song.title = tmp->title;
-				song.artist = tmp->artist;
-				song.album = tmp->album;
-				song.length = tmp->length;
-				newPlaylist.playlist.push_back(song);
-			}
-		}
-	}
-	allPlaylists.push_back(newPlaylist);
+
+void MusicLibrary::newPlaylist(std::string name){
+	Playlist *node = new Playlist; // make the playlist
+	string partA = "playlist"; string partC = ".txt"; string partB; string filename;
+	totalPlaylists++;
+	partB = to_string(totalPlaylists);
+	filename = partA + partB + partC;
+	node->playlistName = name;
+	node->fileName = filename;
+	
+	const char * filename2 = filename.c_str();
+	ofstream file(filename2); // makes the .txt file
+	file << name << "\n";
+	file.close();
+	
+	allPlaylists.push_back(*node); // adds playlist to program
 }
 
-double MusicLibrary::timeConverter(string time){ // this function is what allows me to take a string of 4:42 and then convert that into the number of seconds, I do this because my timer function needs seconds
-	double returnVal = 0;
-	string minutes = "";
-	string seconds = "";
-	bool before = true;
-	for(int i = 0; i < time.size(); i++){
-		if(time[i] == ':'){
-			before = false;
+
+void MusicLibrary::removePlaylist(std::string name){
+	Playlist *node = getSelectedPlaylist(name);
+	if(node == NULL){
+		cout << "Did not find playlist to delete" << endl;
+	}
+	else{
+		string filename = node->fileName;
+		for(int i = 0; i < allPlaylists.size(); i++){ // this will get playlist out of program
+			if(name == allPlaylists[i].playlistName){
+				allPlaylists.erase(allPlaylists.begin()+i);
+			}
+		}
+		totalPlaylists--; // I don't think I need to do 'delete node;' on next line because the erase function above does that for me, not 100% sure tho
+		// delete node; this will crash the program... "error in ./a.out: double free or corruption (fasttop): memory address
+		
+		const char *filename2 = filename.c_str(); // gets rid of .txt file
+		remove(filename2);
+	}
+}
+
+
+void MusicLibrary::enqueue(Song song, MusicLibrary ml){
+	bool check = ml.queueIsFull();
+	if(check == false){
+		arrayQueue[tail] = song;
+		queueCount++;
+		if(tail == queueSize-1){
+			tail = 0;
 		}
 		else{
-			if(before == true){
-				minutes = minutes += time[i];
+			tail++;
+		}
+		cout << song.title << " has been added to the queue" << endl;
+	}
+	else{
+		cout << "Queue is full" << endl;
+	}
+}
+
+
+Song MusicLibrary::dequeue(MusicLibrary ml){
+	bool check = ml.queueIsEmpty(); Song value;
+	if(check == false){
+		value = arrayQueue[head];
+		queueCount--;
+		if(head == queueSize-1){
+			head = 0;
+		}
+		else{
+			head++;
+		}
+	}
+	else{
+		cout << "Queue is empty" << endl;
+	}
+	return value;
+}
+
+
+void MusicLibrary::printQueue(MusicLibrary ml){
+	int j = head;
+	if(ml.queueIsEmpty() == false){
+		for(int i = 0; i < queueCount; i++){
+			if(j < queueSize){
+				cout << j << ": " << arrayQueue[j].title << endl;
+				j++;
 			}
-			else if(before == false){
-				seconds = seconds += time[i];
+			else{
+				j = 0;
+				cout << j << ": " << arrayQueue[j].title << endl;
+				j++;
 			}
 		}
 	}
-	double min = stod(minutes);
-	double sec = stod(seconds);
-	min = min*60;
-	returnVal = min + sec;
-	return returnVal;
+	else{
+		cout << "Empty" << endl;
+	}
 }
 
-int MusicLibrary::numSongs(){ // haven't used this function yet, thought I was going to but never did, keeping it in case it becomes useful
-	int count = 0;
+
+bool MusicLibrary::queueIsFull(){
+	if(queueCount == 200){
+		return true;
+	}
+	return false;
+}
+
+
+bool MusicLibrary::queueIsEmpty(){
+	if(queueCount == 0){
+		return true;
+	}
+	return false;
+}
+
+
+void MusicLibrary::queueAllSongs(MusicLibrary ml){
 	for(int i = 0; i < tableSize; i++){
 		if(hashTable[i] != NULL){
 			Song *tmp = hashTable[i];
 			while(tmp->next != NULL){
-				count++;
+				enqueue(*tmp, ml);
 				tmp = tmp->next;
 			}
-			count++;
+			enqueue(*tmp, ml);
 		}
 	}
-	return count;
-}
-
-int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store everything, as you should know
-	int sum = 0;
-	for(int x = 0; x < key.size(); x++){
-		sum = sum + key[x];
-	}
-	sum = sum % s;
-	return sum;
 }

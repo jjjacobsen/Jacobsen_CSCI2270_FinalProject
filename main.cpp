@@ -18,7 +18,7 @@ int main(){
 		cout << "5. Search by Artist" << endl;
 		cout << "6. Go To Playlists" << endl;
 		cout << "7. Go To Queue" << endl;
-		cout << "8. Quit" << endl;
+		cout << "8. Quit ('q' will quit any time)" << endl;
 		string path;
 		cin >> path;
 		if(path == "1"){
@@ -28,16 +28,16 @@ int main(){
 			string wtf;
 			getline(cin,wtf);
 			string name;
-			cout << "Enter title: ";
+			cout << "Enter Title: ";
 			getline(cin,name);
 			string ar;
-			cout << "Enter artist: ";
+			cout << "Enter Artist: ";
 			getline(cin,ar);
 			string al;
-			cout << "Enter album: ";
+			cout << "Enter Album: ";
 			getline(cin,al);
 			string le;
-			cout << "Enter length: ";
+			cout << "Enter Length: ";
 			getline(cin,le);
 			ml.addSong(name,ar,al,le);
 			ml.newSong(name,ar,al,le);
@@ -71,6 +71,10 @@ int main(){
 					else if(whatNext == "2"){
 						on3 = false;
 					}
+					else if(whatNext == "q"){
+						on3 = false;
+						on = false;
+					}
 				}
 			}
 		}
@@ -97,7 +101,7 @@ int main(){
 				while(on2 == true){
 					cout << "===Found Artist===" << endl;
 					cout << "1. Display Songs" << endl;
-					cout << "2. Back To Main Menu" << endl;
+					cout << "2. Back to Main Menu" << endl;
 					string whereTo;
 					cin >> whereTo;
 					if(whereTo == "1"){
@@ -113,6 +117,10 @@ int main(){
 					}
 					else if(whereTo == "2"){
 						on2 = false;
+					}
+					else if(whereTo == "q"){
+						on2 = false;
+						on = false;
 					}
 				}
 			}
@@ -145,7 +153,7 @@ int main(){
 							cout << "================" << endl;
 							cout << "1. Add Song" << endl;
 							cout << "2. Delete Song" << endl;
-							cout << "3. Back to playlist menu" << endl;
+							cout << "3. Back to Playlist Menu" << endl;
 							string nextinput;
 							cin >> nextinput;
 							if(nextinput == "1"){
@@ -167,6 +175,10 @@ int main(){
 							else if(nextinput == "3"){
 								on6 = false;
 							}
+							else if(nextinput == "q"){
+								on6 = false;
+								on = false;
+							}
 						}
 					}
 				}
@@ -174,11 +186,28 @@ int main(){
 					on4 = false;
 				}
 				else if(anotha == "3"){
-					// new playlist
-					// MAKE SURE TO UPDATE THE TOTALPLAYLISTS PRIVATE MEMBER
+					string wtf;
+					getline(cin,wtf);
+					string input;
+					cout << "What is the name of your new playlist (enter 'no' to cancel): ";
+					getline(cin,input);
+					if(input != "no"){
+						ml.newPlaylist(input);
+					}
 				}
 				else if(anotha == "4"){
-					// delete playlist
+					string wtf;
+					getline(cin,wtf);
+					string input;
+					cout << "What playlist do you want to delete (enter 'no' to cancel): ";
+					getline(cin,input);
+					if(input != "no"){
+						ml.removePlaylist(input);
+					}
+				}
+				else if(anotha == "q"){
+					on4 = false;
+					on = false;
 				}
 			}
 		}
@@ -187,28 +216,64 @@ int main(){
 			while(on5){
 				cout << "=====Queue=====" << endl;
 				cout << "1. Display Order" << endl;
-				cout << "2. Add Song to Up Next" << endl;
-				cout << "3. Play from all songs" << endl;
-				cout << "4. Play playlist" << endl;
-				cout << "5. Back to Main Menu" << endl;
+				cout << "2. Add Song to queue" << endl;
+				cout << "3. Remove Song from queue" << endl;
+				cout << "4. Play from all songs" << endl;
+				cout << "5. Play from playlist" << endl;
+				cout << "6. Back to Main Menu" << endl;
 				string last;
 				cin >> last;
 				if(last == "1"){
-					// display the queue
+					ml.printQueue(ml);
 				}
 				else if(last == "2"){
-					// add a song to queue
+					string wtf;
+					getline(cin,wtf);
+					string input;
+					cout << "What song would you like to queue: ";
+					getline(cin,input);
+					Song *node = ml.searchBySong(input);
+					if(node == NULL){
+						cout << "Did not find song" << endl;
+					}
+					else{
+						ml.enqueue(*node, ml);
+					}
 				}
 				else if(last == "3"){
-					// remake queue for all songs
+					Song song = ml.dequeue(ml);
+					cout << "Removed " << song.title << " from queue" << endl;
 				}
 				else if(last == "4"){
-					// play from a playlist
+					ml.queueAllSongs(ml);
 				}
 				else if(last == "5"){
+					string wtf;
+					getline(cin,wtf);
+					string input;
+					cout << "What playlist would you like to queue: ";
+					getline(cin,input);
+					Playlist *node = ml.getSelectedPlaylist(input);
+					if(node == NULL){
+						cout << "Did not find playlist" << endl;
+					}
+					else{
+						for(int i = 0; i < node->playlist.size(); i++){
+							ml.enqueue(node->playlist[i], ml);
+						}
+					}
+				}
+				else if(last == "6"){
 					on5 = false;
 				}
+				else if(last == "q"){
+					on5 = false;
+					on = false;
+				}
 			}
+		}
+		else if(path == "q"){
+			on = false;
 		}
 	}
 
