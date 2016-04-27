@@ -1,6 +1,5 @@
 Rock
 Monster
 I The Creator
-Atlas
-Grenade
 Hero
+Atlas

@@ -69,7 +69,7 @@ MusicLibrary::MusicLibrary(){
 		file4.close();
 	}
 	
-	// Third part is to make queue ready
+	// Third part is to make queue ready, I make a massive array for this queue
 	queueSize = 200;
 	arrayQueue = new Song[queueSize];
 	head = 0;
@@ -79,11 +79,11 @@ MusicLibrary::MusicLibrary(){
 
 
 MusicLibrary::~MusicLibrary(){
-	; // destructor
+	; // destructor, don't need anything here
 }
 
 
-int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store everything, as you should know
+int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store everything in the hash table, as you should know
 	int sum = 0;
 	for(int x = 0; x < key.size(); x++){
 		sum = sum + key[x];
@@ -93,7 +93,7 @@ int MusicLibrary::hashSum(std::string key, int s){ // the essence of how I store
 }
 
 
-void MusicLibrary::displaySongs(){ // simply goes through each index in hash table and prints out songs
+void MusicLibrary::displaySongs(){ // simply goes through each index in hash table and prints out all the songs
 	Song *tmp = new Song;
 	cout << "=====SONGS=====" << endl;
 	for(int x = 0; x < tableSize; x++){
@@ -150,7 +150,8 @@ void MusicLibrary::deleteSong(string name){ // making this function was tricky b
 		file3.close();
 		remove("songs.txt");
 		rename("outfile.txt","songs.txt"); // this method of copying the whole file except for one line and then renaming the new file wouldn't work for huge data sets, but for this small project it will do
-	
+		
+		//This last part removes the song from the program after the .txt file is modified
 		int index = hashSum(name,tableSize);
 		if(node->previous == NULL && node->next == NULL){
 			hashTable[index] = NULL;
@@ -173,7 +174,7 @@ void MusicLibrary::deleteSong(string name){ // making this function was tricky b
 }
 
 
-Song* MusicLibrary::searchBySong(string name){ // returns a Song pointer for whatever title you search for
+Song* MusicLibrary::searchBySong(string name){ // returns a pointer to the song for whatever title you search for
 	int index = hashSum(name,tableSize);
 	Song *tmp = hashTable[index];
 	if(tmp == NULL){
@@ -309,7 +310,7 @@ void MusicLibrary::addPlaylist(string fileName){ // just used to build the playl
 }
 
 
-void MusicLibrary::displayPlaylists(){
+void MusicLibrary::displayPlaylists(){ // simply shows what playlists there are
 	if(allPlaylists.size() != 0){
 		cout << "Current Playlists:" << endl;
 		for(int i = 0; i < totalPlaylists; i++){
@@ -347,7 +348,7 @@ void MusicLibrary::addSongPlaylist(string name, Playlist *pl){
 		cout << "Did not find song in library" << endl;
 	}
 	else{
-		Song newSong; // adds the song to the vector of songs in the playlist
+		Song newSong; // adds the song to the vector of songs in the playlist struct
 		newSong.title = tmp->title;
 		newSong.artist = tmp->artist;
 		newSong.album = tmp->album;
@@ -366,7 +367,7 @@ void MusicLibrary::addSongPlaylist(string name, Playlist *pl){
 }
 
 
-Playlist* MusicLibrary::getSelectedPlaylist(string name){
+Playlist* MusicLibrary::getSelectedPlaylist(string name){ // returns the pointer to a selected playlist
 	for(int i = 0; i < totalPlaylists; i++){
 		if(allPlaylists[i].playlistName == name){
 			return &allPlaylists[i];
@@ -376,7 +377,7 @@ Playlist* MusicLibrary::getSelectedPlaylist(string name){
 }
 
 
-void MusicLibrary::removeSongPlaylist(std::string name, Playlist *pl){
+void MusicLibrary::removeSongPlaylist(std::string name, Playlist *pl){ // very similar to the remove song from hash table function
 	bool found = false;
 	for(int i = 0; i < pl->playlist.size(); i++){
 		if(name == pl->playlist[i].title){
@@ -437,10 +438,12 @@ void MusicLibrary::removePlaylist(std::string name){
 		cout << "Did not find playlist to delete" << endl;
 	}
 	else{
+		int marker;
 		string filename = node->fileName;
 		for(int i = 0; i < allPlaylists.size(); i++){ // this will get playlist out of program
 			if(name == allPlaylists[i].playlistName){
 				allPlaylists.erase(allPlaylists.begin()+i);
+				marker = i;
 			}
 		}
 		totalPlaylists--; // I don't think I need to do 'delete node;' on next line because the erase function above does that for me, not 100% sure tho
@@ -448,6 +451,19 @@ void MusicLibrary::removePlaylist(std::string name){
 		
 		const char *filename2 = filename.c_str(); // gets rid of .txt file
 		remove(filename2);
+		
+		for(marker; marker < allPlaylists.size(); marker++){
+			node = &allPlaylists[marker];
+			string oldfilename = node->fileName;
+			string partA = "playlist"; string partC = ".txt"; string partB;
+			partB = to_string(marker+1);
+			string filename3 = partA + partB + partC;
+			node->fileName = filename3;
+			
+			const char *oldfilename2 = oldfilename.c_str();
+			const char *filename4 = filename3.c_str();
+			rename(oldfilename2,filename4);
+		}
 	}
 }
 
@@ -493,14 +509,18 @@ Song MusicLibrary::dequeue(MusicLibrary ml){
 void MusicLibrary::printQueue(MusicLibrary ml){
 	int j = head;
 	if(ml.queueIsEmpty() == false){
-		for(int i = 0; i < queueCount; i++){
+		cout << "Currenly playing: " << arrayQueue[j].title << endl;
+		cout << "Up Next" << endl;
+		cout << "-------" << endl;
+		j++;
+		for(int i = 1; i < queueCount; i++){
 			if(j < queueSize){
-				cout << j << ": " << arrayQueue[j].title << endl;
+				cout << arrayQueue[j].title << endl;
 				j++;
 			}
 			else{
 				j = 0;
-				cout << j << ": " << arrayQueue[j].title << endl;
+				cout << arrayQueue[j].title << endl;
 				j++;
 			}
 		}
